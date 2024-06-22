@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--继承parent工程-->
+    <parent>
+        <groupId>com.qm</groupId>
+        <artifactId>learn-online-parent</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <!--基于当前的pom.xml找到父工程-->
+        <relativePath>../learn-online-parent</relativePath>
+    </parent>
+
+    <artifactId>learn-online-content</artifactId>
+
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>learn-online-api</module>
+        <module>learn-online-model</module>
+        <module>learn-online-service</module>
+    </modules>
+</project>
