@@ -12,23 +12,23 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class XueChengPlusException extends RuntimeException {
+public class LearnOnlineException extends RuntimeException {
 
     private String errMessage;
 
-    public XueChengPlusException() {
+    public LearnOnlineException() {
     }
 
-    public XueChengPlusException(String message) {
+    public LearnOnlineException(String message) {
         super(message);
         this.errMessage = message;
     }
 
     public static void cast(String message) {
-        throw new XueChengPlusException(message);
+        throw new LearnOnlineException(message);
     }
 
     public static void cast(CommonError error) {
-        throw new XueChengPlusException(error.getErrMessage());
+        throw new LearnOnlineException(error.getErrMessage());
     }
 }

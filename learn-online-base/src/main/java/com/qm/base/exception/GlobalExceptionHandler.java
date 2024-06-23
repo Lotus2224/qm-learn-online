@@ -20,9 +20,9 @@ public class GlobalExceptionHandler {
 
     //对项目的自定义异常类型进行处理
     @ResponseBody
-    @ExceptionHandler(XueChengPlusException.class)
+    @ExceptionHandler(LearnOnlineException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public RestErrorResponse customException(XueChengPlusException e) {
+    public RestErrorResponse customException(LearnOnlineException e) {
         //记录异常
         log.error("系统异常{}", e.getErrMessage(), e);
         //..
