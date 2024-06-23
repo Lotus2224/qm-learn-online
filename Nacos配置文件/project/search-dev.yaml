@@ -1,0 +1,10 @@
+server:
+  servlet:
+    context-path: /search
+  port: 53080
+
+elasticsearch:
+  hostlist: 116.198.224.127:9200  
+  course:
+    index: course-publish
+    source_fields: id,companyId,companyName,name,users,grade,mt,mtName,st,stName,charge,pic,price,originalPrice,description,teachmode,validDays,createDate

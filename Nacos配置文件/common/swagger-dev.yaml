@@ -1,0 +1,7 @@
+# swagger 文档配置
+swagger:
+  title: "在线学习平台"
+  description: "在线学习平台项目接口文档"
+  base-package: com.qm.content
+  enabled: true
+  version: 1.0.0

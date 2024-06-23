@@ -1,0 +1,10 @@
+server:
+  servlet:
+    context-path: /content
+  port: 53040
+
+#配置本地优先
+spring:
+  cloud:
+   config:
+     override-none: true

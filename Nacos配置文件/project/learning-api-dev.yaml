@@ -1,0 +1,4 @@
+server:
+  servlet:
+    context-path: /learning
+  port: 53020

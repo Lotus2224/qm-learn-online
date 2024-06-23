@@ -16,6 +16,14 @@
     <name>learn-online-parent</name>
     <description>learn-online-parent</description>
 
+    <modules>
+        <module>../learn-online-base</module>
+        <module>../learn-online-generator</module>
+        <module>../learn-online-content</module>
+        <module>../learn-online-system</module>
+        <module>../learn-online-message-sdk</module>
+    </modules>
+
     <properties>
         <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

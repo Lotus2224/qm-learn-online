@@ -1,0 +1,32 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://116.198.224.127:3306/media?serverTimezone=UTC&userUnicode=true&useSSL=false
+    username: root
+    password: 123
+  cloud:
+   config:
+    override-none: true
+
+minio:
+  endpoint: http://116.198.224.127:9090
+  accessKey: Lotus
+  secretKey: minio123456
+  bucket:
+    files: mediafiles
+    videofiles: video
+
+xxl:
+  job:
+    admin: 
+      addresses: http://116.198.224.127:18088/xxl-job-admin/
+    executor:
+      appname: media-process-service
+      address:
+      ip:
+      port: 9999
+      logpath: /data/applogs/xxl-job-jobhandler
+      logretentiondays: 30
+    accessToken: default_token
+videoprocess:
+  ffmpegpath: D:\SoftWare\ffmpeg\ffmpeg.exe
