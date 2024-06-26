@@ -7,12 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * @author Mr.M
- * @version 1.0
- * @description 消息处理测试类，继承MessageProcessAbstract
- * @date 2022/9/21 21:44
- */
+// 消息处理测试类，继承MessageProcessAbstract
 @Slf4j
 @Component
 public class MessageProcessClass extends MessageProcessAbstract {

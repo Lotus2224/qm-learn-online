@@ -8,12 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-/**
- * @author Mr.M
- * @version 1.0
- * @description 课程计划mapper测试
- * @date 2023/2/12 9:24
- */
+// 课程计划mapper测试
 @SpringBootTest
 public class TeachplanMapperTests {
 

@@ -5,13 +5,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * <p>
- * 课程分类
- * </p>
- *
- * @author itcast
- */
+// 课程分类
 @Data
 @TableName("course_category")
 public class CourseCategory implements Serializable {

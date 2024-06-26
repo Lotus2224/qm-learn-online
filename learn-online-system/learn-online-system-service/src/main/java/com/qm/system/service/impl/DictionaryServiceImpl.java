@@ -10,13 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-/**
- * <p>
- * 数据字典 服务实现类
- * </p>
- *
- * @author itcast
- */
+// 数据字典 服务实现类
 @Slf4j
 @Service
 public class DictionaryServiceImpl extends ServiceImpl<DictionaryMapper, Dictionary> implements DictionaryService {

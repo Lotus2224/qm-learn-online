@@ -8,13 +8,7 @@ import lombok.Data;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-/**
- * <p>
- * 课程发布
- * </p>
- *
- * @author itcast
- */
+// 课程发布
 @Data
 @TableName("course_publish_pre")
 public class CoursePublishPre implements Serializable {

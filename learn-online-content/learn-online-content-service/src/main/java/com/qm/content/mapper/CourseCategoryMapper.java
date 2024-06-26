@@ -6,13 +6,7 @@ import com.qm.content.model.po.CourseCategory;
 
 import java.util.List;
 
-/**
- * <p>
- * 课程分类 Mapper 接口
- * </p>
- *
- * @author itcast
- */
+// 课程分类 Mapper 接口
 public interface CourseCategoryMapper extends BaseMapper<CourseCategory> {
 
     //使用递归查询分类

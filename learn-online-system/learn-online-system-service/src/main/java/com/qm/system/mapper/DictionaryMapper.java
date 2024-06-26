@@ -3,13 +3,7 @@ package com.qm.system.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.qm.system.model.po.Dictionary;
 
-/**
- * <p>
- * 数据字典 Mapper 接口
- * </p>
- *
- * @author itcast
- */
+// 数据字典 Mapper 接口
 public interface DictionaryMapper extends BaseMapper<Dictionary> {
 
 }

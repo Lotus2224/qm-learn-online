@@ -7,13 +7,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 
-/**
- * <p>
- * 数据字典
- * </p>
- *
- * @author itcast
- */
+// 数据字典
 @Data
 @TableName("dictionary")
 public class Dictionary implements Serializable {

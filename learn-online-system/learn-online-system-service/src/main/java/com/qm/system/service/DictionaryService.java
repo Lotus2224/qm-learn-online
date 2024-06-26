@@ -5,14 +5,7 @@ import com.qm.system.model.po.Dictionary;
 
 import java.util.List;
 
-/**
- * <p>
- * 数据字典 服务类
- * </p>
- *
- * @author itcast
- * @since 2021-10-07
- */
+// 数据字典 服务类
 public interface DictionaryService extends IService<Dictionary> {
 
     /**

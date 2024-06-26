@@ -6,13 +6,7 @@ import lombok.Data;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-/**
- * <p>
- * 课程基本信息
- * </p>
- *
- * @author itcast
- */
+// 课程基本信息
 @Data
 @TableName("course_base")
 public class CourseBase implements Serializable {

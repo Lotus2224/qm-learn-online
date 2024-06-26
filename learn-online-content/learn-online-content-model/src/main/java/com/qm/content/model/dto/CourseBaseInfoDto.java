@@ -3,12 +3,7 @@ package com.qm.content.model.dto;
 import com.qm.content.model.po.CourseBase;
 import lombok.Data;
 
-/**
- * @description 课程基本信息dto
- * @author Mr.M
- * @date 2022/9/7 17:44
- * @version 1.0
- */
+// 课程基本信息dto
 @Data
 public class CourseBaseInfoDto extends CourseBase {
 
