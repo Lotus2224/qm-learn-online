@@ -6,15 +6,12 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.qm.base.exception.LearnOnlineException;
 import com.qm.base.model.PageParams;
 import com.qm.base.model.PageResult;
-import com.qm.content.mapper.CourseBaseMapper;
-import com.qm.content.mapper.CourseCategoryMapper;
-import com.qm.content.mapper.CourseMarketMapper;
+import com.qm.content.mapper.*;
 import com.qm.content.model.dto.AddCourseDto;
 import com.qm.content.model.dto.CourseBaseInfoDto;
 import com.qm.content.model.dto.EditCourseDto;
 import com.qm.content.model.dto.QueryCourseParamsDto;
-import com.qm.content.model.po.CourseBase;
-import com.qm.content.model.po.CourseMarket;
+import com.qm.content.model.po.*;
 import com.qm.content.service.CourseBaseInfoService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -26,12 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * @author Mr.M
- * @version 1.0
- * @description TODO
- * @date 2023/2/12 10:16
- */
 @Slf4j
 @Service
 public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
@@ -44,164 +35,190 @@ public class CourseBaseInfoServiceImpl implements CourseBaseInfoService {
     @Autowired
     CourseCategoryMapper courseCategoryMapper;
 
+    @Autowired
+    CourseMarketServiceImpl courseMarketServiceImpl;
+
+    @Autowired
+    CourseTeacherMapper courseTeacherMapper;
+
+    @Autowired
+    TeachplanMapper teachplanMapper;
+
+
+    /**
+     * 课程分页查询
+     * @param pageParams 分页查询参数
+     * @param queryCourseParams 查询条件
+     * @return 查询结果
+     */
     @Override
-    public PageResult<CourseBase> queryCourseBaseList(PageParams pageParams, QueryCourseParamsDto courseParamsDto) {
-
-        //拼装查询条件
-        LambdaQueryWrapper<CourseBase> queryWrapper = new LambdaQueryWrapper<>();
-        //根据名称模糊查询,在sql中拼接 course_base.name like '%值%'
-        queryWrapper.like(StringUtils.isNotEmpty(courseParamsDto.getCourseName()), CourseBase::getName, courseParamsDto.getCourseName());
-        //根据课程审核状态查询 course_base.audit_status = ?
-        queryWrapper.eq(StringUtils.isNotEmpty(courseParamsDto.getAuditStatus()), CourseBase::getAuditStatus, courseParamsDto.getAuditStatus());
-        //按课程发布状态查询
-        queryWrapper.eq(StringUtils.isNotEmpty(courseParamsDto.getPublishStatus()), CourseBase::getStatus, courseParamsDto.getPublishStatus());
-        //创建page分页参数对象，参数：当前页码，每页记录数
-        Page<CourseBase> page = new Page<>(pageParams.getPageNo(), pageParams.getPageSize());
-        //开始进行分页查询
-        Page<CourseBase> pageResult = courseBaseMapper.selectPage(page, queryWrapper);
-        //数据列表
-        List<CourseBase> items = pageResult.getRecords();
-        //总记录数
-        long total = pageResult.getTotal();
-        //List<T> items, long counts, long page, long pageSize
-        return new PageResult<>(items, total, pageParams.getPageNo(), pageParams.getPageSize());
-    }
-
     @Transactional
-    @Override
-    public CourseBaseInfoDto createCourseBase(Long companyId, AddCourseDto dto) {
-        //向课程基本信息表course_base写入数据
-        CourseBase courseBaseNew = new CourseBase();
-        //将传入的页面的参数放到courseBaseNew对象
-//        courseBaseNew.setName(dto.getName());
-//        courseBaseNew.setDescription(dto.getDescription());
-        //上边的从原始对象中get拿数据向新对象set，比较复杂
-        BeanUtils.copyProperties(dto, courseBaseNew);//只要属性名称一致就可以拷贝
-        courseBaseNew.setCompanyId(companyId);
-        courseBaseNew.setCreateDate(LocalDateTime.now());
-        //审核状态默认为未提交
-        courseBaseNew.setAuditStatus("202002");
-        //发布状态为未发布
-        courseBaseNew.setStatus("203001");
-        //插入数据库
-        int insert = courseBaseMapper.insert(courseBaseNew);
-        if (insert <= 0) {
-            throw new RuntimeException("添加课程失败");
-        }
-
-        //向课程营销系courese_market写入数据
-        CourseMarket courseMarketNew = new CourseMarket();
-        //将页面输入的数据拷贝到courseMarketNew
-        BeanUtils.copyProperties(dto, courseMarketNew);
-        //课程的id
-        Long courseId = courseBaseNew.getId();
-        courseMarketNew.setId(courseId);
-        //保存营销信息
-        saveCourseMarket(courseMarketNew);
-        //从数据库查询课程的详细信息，包括两部分
-        CourseBaseInfoDto courseBaseInfo = getCourseBaseInfo(courseId);
-
-        return courseBaseInfo;
+    public PageResult<CourseBase> queryCourseBaseList(Long companyId, PageParams pageParams, QueryCourseParamsDto queryCourseParams) {
+        // 构建条件查询器
+        LambdaQueryWrapper<CourseBase> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(CourseBase::getCompanyId, companyId);
+        // 构建查询条件：按照课程名称模糊查询
+        queryWrapper.like(StringUtils.isNotEmpty(queryCourseParams.getCourseName()), CourseBase::getName, queryCourseParams.getCourseName());
+        // 构建查询条件，按照课程审核状态查询
+        queryWrapper.eq(StringUtils.isNotEmpty(queryCourseParams.getAuditStatus()), CourseBase::getAuditStatus, queryCourseParams.getAuditStatus());
+        // 构建查询条件，按照课程发布状态查询
+        queryWrapper.eq(StringUtils.isNotEmpty(queryCourseParams.getPublishStatus()), CourseBase::getStatus, queryCourseParams.getPublishStatus());
+        // 分页对象
+        Page<CourseBase> page = new Page<>(pageParams.getPageNo(), pageParams.getPageSize());
+        // 查询数据内容获得结果
+        Page<CourseBase> pageInfo = courseBaseMapper.selectPage(page, queryWrapper);
+        // 获取数据列表
+        List<CourseBase> items = pageInfo.getRecords();
+        // 获取数据总条数
+        long counts = pageInfo.getTotal();
+        // 构建结果集
+        return new PageResult<>(items, counts, pageParams.getPageNo(), pageParams.getPageSize());
     }
 
-    //查询课程信息
+    /**
+     * 新增课程
+     * @param companyId 机构id
+     * @param addCourseDto 课程信息
+     * @return 课程详细信息
+     */
+    @Override
+    @Transactional
+    public CourseBaseInfoDto createCourseBase(Long companyId, AddCourseDto addCourseDto) {
+        // 1. 合法性校验，由JSR-303校验
+        // 2. 封装请求参数
+        // 封装课程基本信息，向课程基本信息表 course_base 写入数据
+        CourseBase courseBase = new CourseBase();
+        BeanUtils.copyProperties(addCourseDto, courseBase);
+        // 2.1 设置默认审核状态（去数据字典表中查询状态码）
+        courseBase.setAuditStatus("202002");
+        // 2.2 设置默认发布状态
+        courseBase.setStatus("203001");
+        // 2.3 设置机构id
+        courseBase.setCompanyId(companyId);
+        // 2.4 设置添加时间
+        courseBase.setCreateDate(LocalDateTime.now());
+        // 2.5 插入课程基本信息表
+        int baseInsert = courseBaseMapper.insert(courseBase);
+        Long courseId = courseBase.getId();
+        // 封装课程营销信息，向课程营销信息表 course_market 写入数据
+        CourseMarket courseMarket = new CourseMarket();
+        BeanUtils.copyProperties(addCourseDto, courseMarket);
+        courseMarket.setId(courseId);
+        // 2.6 判断收费规则，若课程收费，则价格必须大于0
+        int marketInsert = saveCourseMarket(courseMarket);
+        if (baseInsert <= 0 || marketInsert <= 0) {
+            LearnOnlineException.cast("新增课程基本信息失败");
+        }
+        // 3. 返回添加的课程信息
+        return getCourseBaseInfo(courseId);
+    }
+
+    private int saveCourseMarket(CourseMarket courseMarket) {
+        String charge = courseMarket.getCharge();
+        if (StringUtils.isBlank(charge))
+            LearnOnlineException.cast("请设置收费规则");
+        if (charge.equals("201001")) {
+            Float price = courseMarket.getPrice();
+            if (price == null || price <= 0) {
+                LearnOnlineException.cast("课程设置了收费，价格不能为空，且必须大于0");
+            }
+        }
+        // 2.7 插入课程营销信息表
+        boolean flag = courseMarketServiceImpl.saveOrUpdate(courseMarket);
+        return flag ? 1 : -1;
+    }
+
+    /**
+     * 根据课程id查询课程信息
+     * @param courseId 课程id
+     * @return 课程详细信息
+     */
+    @Override
     public CourseBaseInfoDto getCourseBaseInfo(Long courseId) {
-
-        //从课程基本信息表查询
-        CourseBase courseBase = courseBaseMapper.selectById(courseId);
-        if (courseBase == null) {
-            return null;
-        }
-        //从课程营销表查询
-        CourseMarket courseMarket = courseMarketMapper.selectById(courseId);
-
-        //组装在一起
         CourseBaseInfoDto courseBaseInfoDto = new CourseBaseInfoDto();
+        // 1. 根据课程id查询课程基本信息
+        CourseBase courseBase = courseBaseMapper.selectById(courseId);
+        if (courseBase == null)
+            return null;
+        // 1.1 拷贝属性
         BeanUtils.copyProperties(courseBase, courseBaseInfoDto);
-        if (courseMarket != null) {
+        // 2. 根据课程id查询课程营销信息
+        CourseMarket courseMarket = courseMarketMapper.selectById(courseId);
+        // 2.1 拷贝属性
+        if (courseMarket != null)
             BeanUtils.copyProperties(courseMarket, courseBaseInfoDto);
-        }
-
-        //通过courseCategoryMapper查询分类信息，将分类名称放在courseBaseInfoDto对象
-        //todo：课程分类的名称设置到courseBaseInfoDto
-
+        // 3. 查询课程分类名称，并设置属性
+        // 3.1 根据小分类id查询课程分类对象
+        CourseCategory courseCategoryBySt = courseCategoryMapper.selectById(courseBase.getSt());
+        // 3.2 设置课程的小分类名称
+        courseBaseInfoDto.setStName(courseCategoryBySt.getName());
+        // 3.3 根据大分类id查询课程分类对象
+        CourseCategory courseCategoryByMt = courseCategoryMapper.selectById(courseBase.getMt());
+        // 3.4 设置课程大分类名称
+        courseBaseInfoDto.setMtName(courseCategoryByMt.getName());
         return courseBaseInfoDto;
-
     }
 
+    /**
+     * 修改课程
+     * @param companyId 机构id
+     * @param editCourseDto 修改课程信息
+     * @return 课程详细信息
+     */
     @Override
+    @Transactional
     public CourseBaseInfoDto updateCourseBase(Long companyId, EditCourseDto editCourseDto) {
-
-        //拿到课程id
+        // 判断当前修改课程是否属于当前机构
         Long courseId = editCourseDto.getId();
-        //查询课程信息
         CourseBase courseBase = courseBaseMapper.selectById(courseId);
-        if (courseBase == null) {
-            LearnOnlineException.cast("课程不存在");
-        }
-
-        //数据合法性校验
-        //根据具体的业务逻辑去校验
-        //本机构只能修改本机构的课程
         if (!companyId.equals(courseBase.getCompanyId())) {
-            LearnOnlineException.cast("本机构只能修改本机构的课程");
+            LearnOnlineException.cast("只允许修改本机构的课程");
         }
-
-        //封装数据
+        // 拷贝对象
         BeanUtils.copyProperties(editCourseDto, courseBase);
-        //修改时间
+        // 更新，设置更新时间
         courseBase.setChangeDate(LocalDateTime.now());
-
-        //更新数据库
-        int i = courseBaseMapper.updateById(courseBase);
-        if (i <= 0) {
-            LearnOnlineException.cast("修改课程失败");
-        }
-        //更新营销信息
-        //todo:更新营销信息
+        courseBaseMapper.updateById(courseBase);
+        // 查询课程营销信息
         CourseMarket courseMarket = courseMarketMapper.selectById(courseId);
+        // 由于课程营销信息不是必填项，故这里先判断一下
         if (courseMarket == null) {
             courseMarket = new CourseMarket();
         }
+        // 对象拷贝
         BeanUtils.copyProperties(editCourseDto, courseMarket);
         courseMarket.setId(courseId);
-//        courseMarketMapper.updateById(courseMarket);
+        // 获取课程收费状态并设置
         this.saveCourseMarket(courseMarket);
-        //查询课程信息
-        CourseBaseInfoDto courseBaseInfo = getCourseBaseInfo(courseId);
-        return courseBaseInfo;
+        return getCourseBaseInfo(courseId);
     }
 
-    //单独写一个方法保存营销信息，逻辑：存在则更新，不存在则添加
-    private int saveCourseMarket(CourseMarket courseMarketNew) {
-
-        //参数的合法性校验
-        String charge = courseMarketNew.getCharge();
-        if (StringUtils.isEmpty(charge)) {
-            throw new RuntimeException("收费规则为空");
+    /**
+     * 删除课程
+     * @param companyId 机构id
+     * @param courseId 课程id
+     */
+    @Override
+    public void deleteCourseBase(Long companyId, Long courseId) {
+        //判断当前课程id对应的机构id是否和传入的机构id相同
+        CourseBase courseBase = courseBaseMapper.selectById(courseId);
+        if (courseBase == null) {
+            LearnOnlineException.cast("该课程不存在，删除失败");
         }
-        //如果课程收费，价格没有填写也需要抛出异常
-        if (charge.equals("201001")) {
-            if (courseMarketNew.getPrice() == null || courseMarketNew.getPrice().floatValue() <= 0) {
-//               throw new RuntimeException("课程的价格不能为空并且必须大于0");
-                LearnOnlineException.cast("课程的价格不能为空并且必须大于0");
-            }
+        if (!companyId.equals(courseBase.getCompanyId())) {
+            LearnOnlineException.cast("只允许删除本机构的课程");
         }
-
-        //从数据库查询营销信息,存在则更新，不存在则添加
-        Long id = courseMarketNew.getId();//主键
-        CourseMarket courseMarket = courseMarketMapper.selectById(id);
-        if (courseMarket == null) {
-            //插入数据库
-            int insert = courseMarketMapper.insert(courseMarketNew);
-            return insert;
-        } else {
-            //将courseMarketNew拷贝到courseMarket
-            BeanUtils.copyProperties(courseMarketNew, courseMarket);
-            courseMarket.setId(courseMarketNew.getId());
-            //更新
-            int i = courseMarketMapper.updateById(courseMarket);
-            return i;
-        }
+        // 删除课程教师表course_teacher
+        LambdaQueryWrapper<CourseTeacher> courseTeacherLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        courseTeacherLambdaQueryWrapper.eq(CourseTeacher::getCourseId, courseId);
+        courseTeacherMapper.delete(courseTeacherLambdaQueryWrapper);
+        // 删除课程计划表teachplan
+        LambdaQueryWrapper<Teachplan> teachplanLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        teachplanLambdaQueryWrapper.eq(Teachplan::getCourseId, courseId);
+        teachplanMapper.delete(teachplanLambdaQueryWrapper);
+        // 删除课程基本信息表course_base
+        courseBaseMapper.deleteById(courseId);
+        // 删除课程营销信息表course_market
+        courseMarketMapper.deleteById(courseId);
     }
 }

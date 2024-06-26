@@ -1,4 +1,4 @@
-package com.qm.content;
+package com.qm;
 
 import com.spring4all.swagger.EnableSwagger2Doc;
 import org.springframework.boot.SpringApplication;

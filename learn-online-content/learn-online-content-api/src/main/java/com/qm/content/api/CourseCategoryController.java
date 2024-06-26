@@ -9,12 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/**
- * @author Mr.M
- * @version 1.0
- * @description 课程分类相关接口
- * @date 2023/2/12 11:54
- */
+// 课程分类相关接口
 @RestController
 public class CourseCategoryController {
 

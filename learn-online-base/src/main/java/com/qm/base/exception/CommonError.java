@@ -1,18 +1,12 @@
 package com.qm.base.exception;
 
-
 import lombok.Getter;
 
-/**
- * @author Mr.M
- * @version 1.0
- * @description 通用错误信息
- * @date 2022/9/6 11:29
- */
+// 通用错误信息（枚举类型）
 @Getter
 public enum CommonError {
 
-    UNKOWN_ERROR("执行过程异常，请重试。"),
+    UNKOWN_ERROR("执行过程异常，请重试"),
     PARAMS_ERROR("非法参数"),
     OBJECT_NULL("对象为空"),
     QUERY_NULL("查询结果为空"),

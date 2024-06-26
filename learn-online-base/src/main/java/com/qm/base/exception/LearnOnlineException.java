@@ -3,13 +3,7 @@ package com.qm.base.exception;
 import lombok.Getter;
 import lombok.Setter;
 
-/**
- * @author Mr.M
- * @version 1.0
- * @description 本项目自定义异常类型
- * @date 2023/2/12 16:56
- */
-
+// 项目自定义异常类型
 @Setter
 @Getter
 public class LearnOnlineException extends RuntimeException {
@@ -24,6 +18,7 @@ public class LearnOnlineException extends RuntimeException {
         this.errMessage = message;
     }
 
+    // 为了方便抛出异常，自定义的静态方法cast
     public static void cast(String message) {
         throw new LearnOnlineException(message);
     }
