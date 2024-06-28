@@ -1,13 +1,10 @@
 server:
   servlet:
     context-path: /auth
-  port: 8160
+  port: 63070
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://116.198.224.127:3306/users?serverTimezone=UTC&userUnicode=true&useSSL=false&
     username: root
     password: 123
-weixin:
-  appid: wxed9954c01bb89b47
-  secret: a7482517235173ddb4083788de60b90e

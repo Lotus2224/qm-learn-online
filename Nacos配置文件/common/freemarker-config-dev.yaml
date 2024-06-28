@@ -9,3 +9,4 @@ spring:
     template-loader-path: classpath:/templates/   #页面模板位置(默认为 classpath:/templates/)
     resources:
       add-mappings: false   #关闭项目中的静态资源映射(static、resources文件夹下的资源)
+    

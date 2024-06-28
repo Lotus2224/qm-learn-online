@@ -1,5 +1,5 @@
 ### 查询课程信息
-POST {{content_host}}/content/course/list?pageNo=1&pageSize=2
+POST {{gateway_host}}/content/course/list?pageNo=1&pageSize=2
 Content-Type: application/json
 
 {
@@ -9,10 +9,10 @@ Content-Type: application/json
 }
 
 ### 查询课程分类
-GET {{content_host}}/content/course-category/tree-nodes
+GET {{gateway_host}}/content/course-category/tree-nodes
 
 ### 新增课程
-POST {{content_host}}/content/course
+POST {{gateway_host}}/content/course
 Content-Type: application/json
 
 {
@@ -35,7 +35,7 @@ Content-Type: application/json
 }
 
 ### 修改课程
-PUT {{content_host}}/content/course
+PUT {{gateway_host}}/content/course
 Content-Type: application/json
 
 {
@@ -54,12 +54,12 @@ Content-Type: application/json
 }
 
 ### 课程查询
-GET {{content_host}}/content/course/43
+GET {{gateway_host}}/content/course/43
 Content-Type: application/json
 
 ### 课程计划查询
-GET {{content_host}}/content/teachplan/117/tree-nodes
+GET {{gateway_host}}/content/teachplan/117/tree-nodes
 Content-Type: application/json
 
 ### 删除课程计划
-DELETE {{content_host}}/content/teachplan/43
+DELETE {{gateway_host}}/content/teachplan/43

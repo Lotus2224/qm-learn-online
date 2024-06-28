@@ -1,4 +1,4 @@
 server:
   servlet:
     context-path: /checkcode
-  port: 53075
+  port: 63075

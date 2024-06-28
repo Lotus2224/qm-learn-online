@@ -1,5 +1,5 @@
 server:
   servlet:
     context-path: /media
-  port: 53050
+  port: 63050
 

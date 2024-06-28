@@ -1,7 +1,7 @@
 server:
   servlet:
     context-path: /orders
-  port: 53030
+  port: 63030
 
 
 #配置本地优先

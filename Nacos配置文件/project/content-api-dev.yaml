@@ -1,10 +1,14 @@
 server:
   servlet:
     context-path: /content
-  port: 53040
+  port: 63040
+
+test_config:
+ a: 3a
+ b: 3b
 
 #配置本地优先
 spring:
-  cloud:
-   config:
-     override-none: true
+ cloud:
+  config:
+    override-none: true

@@ -1,10 +1,10 @@
 server:
   servlet:
     context-path: /search
-  port: 53080
+  port: 63080
 
 elasticsearch:
-  hostlist: 116.198.224.127:9200  
+  hostlist: 116.198.224.127:9200 #多个结点中间用逗号分隔
   course:
     index: course-publish
-    source_fields: id,companyId,companyName,name,users,grade,mt,mtName,st,stName,charge,pic,price,originalPrice,description,teachmode,validDays,createDate
+    source_fields: id,name,grade,mt,st,charge,pic,price,originalPrice,teachmode,validDays,createDate

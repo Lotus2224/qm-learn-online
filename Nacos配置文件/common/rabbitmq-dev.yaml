@@ -2,7 +2,7 @@ spring:
   rabbitmq:
     host: 116.198.224.127
     port: 15672
-    username: Lotus
+    username: Louts
     password: 123456
     virtual-host: /
     publisher-confirm-type: correlated #correlated 异步回调，定义ConfirmCallback，MQ返回结果时会回调这个ConfirmCallback
