@@ -1,0 +1,35 @@
+#微服务配置
+spring:
+  application:
+    name: media-api
+  cloud:
+    nacos:
+      server-addr: 116.198.224.127:8848
+      discovery:
+        namespace: ${spring.profiles.active}
+        group: project
+      config:
+        namespace: ${spring.profiles.active}
+        group: project
+        file-extension: yaml
+        refresh-enabled: true
+        extension-configs:
+          - data-id: media-service-${spring.profiles.active}.yaml
+            group: project
+            refresh: true
+        shared-configs:
+          - data-id: swagger-${spring.profiles.active}.yaml
+            group: common
+            refresh: true
+          - data-id: logging-${spring.profiles.active}.yaml
+            group: common
+            refresh: true
+  profiles:
+    active: dev
+
+
+
+
+
+
+
